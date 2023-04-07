@@ -1,5 +1,6 @@
 package ru.practicum.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.StatsDto;
@@ -10,13 +11,10 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequiredArgsConstructor
 public class StatsController {
 
 	private final StatsServiceImpl statsServiceImpl;
-
-	public StatsController(StatsServiceImpl statsServiceImpl) {
-		this.statsServiceImpl = statsServiceImpl;
-	}
 
 	@PostMapping("/hit")
 	@ResponseStatus(HttpStatus.CREATED)

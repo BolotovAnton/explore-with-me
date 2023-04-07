@@ -8,6 +8,7 @@ import ru.practicum.dto.StatsDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.mapper.Mapper;
 import ru.practicum.model.Stats;
+import ru.practicum.util.Constants;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,8 +36,8 @@ public class StatsServiceImpl implements StatsService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<ViewStatsDto> getStats(String start, String end, Set<String> uris, boolean unique) {
-		LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		LocalDateTime startDate = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(Constants.DATEFORMAT));
+		LocalDateTime endDate = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(Constants.DATEFORMAT));
 		log.info("get stats");
 		if (uris == null) {
 			if (unique) {
