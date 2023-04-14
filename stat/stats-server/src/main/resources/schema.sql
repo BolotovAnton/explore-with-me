@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS stats
-(
-    id        INT NOT NULL GENERATED ALWAYS AS IDENTITY,
-    app       VARCHAR(800)      NOT NULL,
-    uri       VARCHAR(255)      NOT NULL,
-    ip        VARCHAR(15)      NOT NULL,
-    timestamp TIMESTAMP WITHOUT TIME ZONE NOT NULL
-);

@@ -11,8 +11,8 @@
 	</parent>
 
 	<modules>
-		<module>stat</module>
-		<module>main</module>
+		<module>stats-service</module>
+		<module>main-service</module>
 	</modules>
 
 	<name>Explore With Me</name>
