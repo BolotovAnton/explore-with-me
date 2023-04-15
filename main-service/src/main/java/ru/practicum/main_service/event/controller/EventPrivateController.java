@@ -25,10 +25,9 @@ public class EventPrivateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> findAllEventsByPrivate(
-            @PathVariable Long userId,
-            @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
+    public List<EventShortDto> findAllEventsByPrivate(@PathVariable Long userId,
+                                                      @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
         return eventService.findAllEventsByPrivate(userId, PageRequest.of(from / size, size));
     }
 
@@ -47,15 +46,15 @@ public class EventPrivateController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByPrivate(@PathVariable Long userId,
-                                            @PathVariable Long eventId,
-                                            @Valid @RequestBody EventUpdateUserDto eventUpdateUserDto) {
+                                             @PathVariable Long eventId,
+                                             @Valid @RequestBody EventUpdateUserDto eventUpdateUserDto) {
         return eventService.updateEventByPrivate(userId, eventId, eventUpdateUserDto);
     }
 
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> findRequestsByEventAuthor(@PathVariable Long userId,
-                                                                      @PathVariable Long eventId) {
+                                                                   @PathVariable Long eventId) {
         return requestService.findRequestsByEventAuthor(userId, eventId);
     }
 

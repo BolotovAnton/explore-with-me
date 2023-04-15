@@ -11,8 +11,8 @@ import ru.practicum.main_service.event.dto.*;
 import ru.practicum.main_service.event.enums.EventSort;
 import ru.practicum.main_service.event.enums.EventState;
 import ru.practicum.main_service.event.enums.EventStateAction;
-import ru.practicum.main_service.event.mapper.EventMapper;
-import ru.practicum.main_service.event.mapper.LocationMapper;
+import ru.practicum.main_service.event.mapper.MapperEvent;
+import ru.practicum.main_service.event.mapper.MapperLocation;
 import ru.practicum.main_service.event.model.Event;
 import ru.practicum.main_service.event.model.Location;
 import ru.practicum.main_service.event.repository.EventRepository;
@@ -38,7 +38,7 @@ public class EventServiceImpl implements EventService {
     private final StatsService statsService;
     private final LocationRepository locationRepository;
     private final EventRepository eventRepository;
-    private final EventMapper eventMapper;
+    private final MapperEvent mapperEvent;
 
     @Override
     public List<EventFullDto> findEventsByAdmin(List<Long> users,
@@ -51,7 +51,7 @@ public class EventServiceImpl implements EventService {
         checkTimeRange(rangeStart, rangeEnd);
         List<Event> events = eventRepository.findEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
         log.info("events have been found");
-        return eventMapper.toEventFullDto(events);
+        return mapperEvent.toEventFullDto(events);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class EventServiceImpl implements EventService {
         if (eventUpdateAdminDto.getLocation() != null) {
             Location location = locationRepository.findByLatAndLon(
                     eventUpdateAdminDto.getLocation().getLat(), eventUpdateAdminDto.getLocation().getLon()
-            ).orElseGet(() -> locationRepository.save(LocationMapper.toLocation(eventUpdateAdminDto.getLocation())));
+            ).orElseGet(() -> locationRepository.save(MapperLocation.toLocation(eventUpdateAdminDto.getLocation())));
             event.setLocation(location);
         }
         if (eventUpdateAdminDto.getStateAction() != null) {
@@ -111,7 +111,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(eventUpdateAdminDto.getRequestModeration());
         }
         log.info("event with id = " + eventId + " has been updated");
-        return eventMapper.toEventFullDto(eventRepository.save(event));
+        return mapperEvent.toEventFullDto(eventRepository.save(event));
     }
 
     @Override
@@ -119,7 +119,7 @@ public class EventServiceImpl implements EventService {
         userService.findUserById(userId);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
         log.info("events of user with id = " + userId + " have been found");
-        return eventMapper.toEventShortDto(events);
+        return mapperEvent.toEventShortDto(events);
     }
 
     @Override
@@ -133,13 +133,13 @@ public class EventServiceImpl implements EventService {
         Category category = categoryService.getCategoryById(eventCreateDto.getCategory());
         Location location = locationRepository.findByLatAndLon(
                 eventCreateDto.getLocation().getLat(), eventCreateDto.getLocation().getLon()
-        ).orElseGet(() -> locationRepository.save(LocationMapper.toLocation(eventCreateDto.getLocation())));
+        ).orElseGet(() -> locationRepository.save(MapperLocation.toLocation(eventCreateDto.getLocation())));
 
-        Event savedEvent = eventMapper.toEvent(
+        Event savedEvent = mapperEvent.toEvent(
                 eventCreateDto, user, category, location, LocalDateTime.now(), EventState.PENDING
         );
         log.info("event has been added");
-        return eventMapper.toEventFullDto(eventRepository.save(savedEvent));
+        return mapperEvent.toEventFullDto(eventRepository.save(savedEvent));
     }
 
     @Override
@@ -148,7 +148,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException("event is not found"));
         log.info("event with id = " + eventId + " has been found");
-        return eventMapper.toEventFullDto(eventRepository.save(event));
+        return mapperEvent.toEventFullDto(eventRepository.save(event));
     }
 
     @Override
@@ -188,7 +188,7 @@ public class EventServiceImpl implements EventService {
         if (eventUpdateUserDto.getLocation() != null) {
             Location location = locationRepository.findByLatAndLon(
                     eventUpdateUserDto.getLocation().getLat(), eventUpdateUserDto.getLocation().getLon()
-            ).orElseGet(() -> locationRepository.save(LocationMapper.toLocation(eventUpdateUserDto.getLocation())));
+            ).orElseGet(() -> locationRepository.save(MapperLocation.toLocation(eventUpdateUserDto.getLocation())));
             event.setLocation(location);
         }
         if (eventUpdateUserDto.getStateAction() != null) {
@@ -202,7 +202,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(eventUpdateUserDto.getRequestModeration());
         }
         log.info("event with id = " + eventId + " has been updated");
-        return eventMapper.toEventFullDto(eventRepository.save(event));
+        return mapperEvent.toEventFullDto(eventRepository.save(event));
     }
 
     @Override
@@ -223,7 +223,7 @@ public class EventServiceImpl implements EventService {
         }
         Map<Long, Long> eventsParticipantLimit = new HashMap<>();
         events.forEach(event -> eventsParticipantLimit.put(event.getId(), event.getParticipantLimit()));
-        List<EventShortDto> eventsShortDto = eventMapper.toEventShortDto(events);
+        List<EventShortDto> eventsShortDto = mapperEvent.toEventShortDto(events);
         if (onlyAvailable) {
             eventsShortDto = eventsShortDto.stream()
                     .filter(event -> (eventsParticipantLimit.get(event.getId()) == 0 ||
@@ -249,7 +249,7 @@ public class EventServiceImpl implements EventService {
         }
         statsService.addHit(request);
         log.info("event with id = " + eventId + " has been found");
-        return eventMapper.toEventFullDto(event);
+        return mapperEvent.toEventFullDto(event);
     }
 
     @Override

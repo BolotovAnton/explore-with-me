@@ -18,7 +18,6 @@ public class CompilationCreateDto {
     @NotNull
     private Boolean pinned;
 
-    @NotNull
     @NotBlank
     private String title;
 

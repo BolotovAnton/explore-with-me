@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserShortDto {
 
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 }

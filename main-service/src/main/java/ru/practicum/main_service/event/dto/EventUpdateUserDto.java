@@ -17,28 +17,28 @@ import java.time.LocalDateTime;
 public class EventUpdateUserDto {
 
     @Size(min = 3, max = 200)
-    String title;
+    private String title;
 
     @Size(min = 20, max = 8000)
-    String annotation;
+    private String annotation;
 
     @Size(min = 20, max = 8000)
-    String description;
+    private String description;
 
-    Long category;
+    private Long category;
 
-    Boolean paid;
+    private Boolean paid;
 
     @PositiveOrZero
-    Long participantLimit;
+    private Long participantLimit;
 
     @JsonFormat(pattern = Constants.DATEFORMAT, shape = JsonFormat.Shape.STRING)
-    LocalDateTime eventDate;
+    private LocalDateTime eventDate;
 
     @Valid
-    LocationDto location;
+    private LocationDto location;
 
-    Boolean requestModeration;
+    private Boolean requestModeration;
 
-    EventStateAction stateAction;
+    private EventStateAction stateAction;
 }

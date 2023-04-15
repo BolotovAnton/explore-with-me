@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class EventMapper {
+public class MapperEvent {
 
     private final StatsService statsService;
 
@@ -36,7 +36,7 @@ public class EventMapper {
         event.setParticipantLimit(eventCreateDto.getParticipantLimit());
         event.setEventDate(eventCreateDto.getEventDate());
         event.setLocation(location);
-        event.setCreatedOn(created);;
+        event.setCreatedOn(created);
         event.setState(state);
         event.setInitiator(initiator);
         event.setRequestModeration(eventCreateDto.getRequestModeration());
@@ -53,7 +53,7 @@ public class EventMapper {
         eventFullDto.setPaid(event.getPaid());
         eventFullDto.setParticipantLimit(event.getParticipantLimit());
         eventFullDto.setEventDate(event.getEventDate());
-        eventFullDto.setLocation(LocationMapper.toLocationDto(event.getLocation()));
+        eventFullDto.setLocation(MapperLocation.toLocationDto(event.getLocation()));
         eventFullDto.setCreatedOn(event.getCreatedOn());
         eventFullDto.setPublishedOn(event.getPublishedOn());
         eventFullDto.setState(event.getState());
